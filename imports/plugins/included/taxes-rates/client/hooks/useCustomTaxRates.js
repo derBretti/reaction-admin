@@ -9,6 +9,7 @@ const getTaxRatesQuery = gql`
         country
         postal
         rate
+        rateIsTaxInclusive
         region
         taxCode
       }

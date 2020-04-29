@@ -6,10 +6,15 @@ import gql from "graphql-tag";
 import { useSnackbar } from "notistack";
 import SimpleSchema from "simpl-schema";
 import Button from "@reactioncommerce/catalyst/Button";
-import Grid from "@material-ui/core/Grid";
-import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
+import {
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  MenuItem,
+  TextField
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
+import muiCheckboxOptions from "reacto-form/cjs/muiCheckboxOptions";
 import muiOptions from "reacto-form/cjs/muiOptions";
 import useReactoForm from "reacto-form/cjs/useReactoForm";
 import CountryOptions from "@reactioncommerce/api-utils/CountryOptions.js";
@@ -70,6 +75,10 @@ const formSchema = new SimpleSchema({
     type: Number,
     min: 0,
     exclusiveMin: true
+  },
+  rateIsTaxInclusive: {
+    type: Boolean,
+    optional: true
   },
   region: {
     type: String,
@@ -148,7 +157,7 @@ export default function CustomTaxRateForm(props) {
               country: formData.country,
               postal: formData.postal,
               rate: Number(formData.rate),
-              region: formData.region,
+              rateIsTaxInclusive: formData.rateIsTaxInclusive,
               shopId,
               taxCode: formData.taxCode,
               taxRateId: formData._id
@@ -163,7 +172,7 @@ export default function CustomTaxRateForm(props) {
               country: formData.country,
               postal: formData.postal,
               rate: Number(formData.rate),
-              region: formData.region,
+              rateIsTaxInclusive: formData.rateIsTaxInclusive,
               shopId,
               taxCode: formData.taxCode
             }
@@ -177,7 +186,7 @@ export default function CustomTaxRateForm(props) {
         country: formData.country,
         postal: formData.postal,
         rate: Number(formData.rate),
-        region: formData.region,
+        rateIsTaxInclusive: formData.rateIsTaxInclusive,
         taxCode: formData.taxCode
       });
     },
@@ -283,6 +292,11 @@ export default function CustomTaxRateForm(props) {
         {...getInputProps("postal", muiOptions)}
       />
       {taxCodesField}
+      <FormControlLabel
+        label={i18next.t("admin.taxFormFields.isTaxInclusive")}
+        control={<Checkbox />}
+        {...getInputProps("rateIsTaxInclusive", muiCheckboxOptions)}
+      />
       <Grid className={classes.rightAlignedGrid} item xs={12}>
         {!!doc &&
           <Button
@@ -325,6 +339,7 @@ CustomTaxRateForm.propTypes = {
     country: PropTypes.string,
     postal: PropTypes.string,
     rate: PropTypes.number,
+    rateIsTaxInclusive: PropTypes.bool,
     region: PropTypes.string,
     taxCode: PropTypes.string
   }),
